@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+env/
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Docker
+*.log
+*.pid
+docker-compose.override.yml
+
+# Build and artifacts
+build/
+*.sol.js
+
+# Misc.
+.vscode/
+.idea/
+*.swp
+.env

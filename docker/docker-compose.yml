@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  ganache:
+    image: trufflesuite/ganache
+    ports:
+      - "8545:8545"
+    command: -m "tech tech tech tech tech"
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ..:/app
+    depends_on:
+      - ganache
+    environment:
+      - WEB3_PROVIDER=http://ganache:8545
+    #command: python ./scripts/interact.py
+
