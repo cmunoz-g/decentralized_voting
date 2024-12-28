@@ -45,4 +45,12 @@ ps:
 re: clean all
 	@echo "$(GREEN)Project restarted successfully!$(DEF_COLOR)"
 
+truffle compile: 
+	@npx truffle compile --all
+	@echo "$(BLUE)Recompiled Voting.sol contract.$(DEF_COLOR)"
+
+truffle migrate:
+	@npx truffle migrate --network development
+	@echo "$(BLUE)Deployed Voting.sol contract in the blockchain.$(DEF_COLOR)"
+
 .PHONY: all build stop clean delete logs ps re

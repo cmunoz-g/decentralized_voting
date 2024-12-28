@@ -38,7 +38,7 @@ contract VotingSystem {
 
 	// Member functions
 
-	function addProposal(string propName, uint propDeadline) public onlyOwner {
+	function addProposal(string memory propName, uint propDeadline) public onlyOwner {
 		require(bytes(propName).length != 0, "Error: Cannot add: Proposal name must not be empty");
 		require(bytes(propName).length < MAX_NAME_LENGTH, "Error: Cannot add: Proposal name exceeds 64 characters");
 		require(propDeadline > block.timestamp, "Error: Cannot add: Deadline is already expired");

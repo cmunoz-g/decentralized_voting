@@ -1,0 +1,28 @@
+{
+	"abi": [
+	  {
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	  },
+	  {
+		"anonymous": false,
+		"inputs": [
+		  {
+			"indexed": true,
+			"internalType": "uint256",
+			"name": "proposalId",
+			"type": "uint256"
+		  },
+		  {
+			"indexed": false,
+			"internalType": "string",
+			"name": "propName",
+			"type": "string"
+		  }
+		],
+		"name": "ProposalAdded",
+		"type": "event"
+	  }
+	]
+  }
