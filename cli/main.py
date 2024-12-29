@@ -4,7 +4,11 @@ from utils import *
 from web3 import Web3
 from datetime import datetime
 
+# Tests y to-do's
+# No hay una forma sencilla de obtener el mensaje de error que tira require en Voting.sol, así que ahora mismo se rechaza la transacción pero no se indica por qué
+
 def display_title():
+	os.system("clear")
 	print(ascii_art)
 	input()
 	os.system("clear")
@@ -26,6 +30,7 @@ def main():
 			break
 		else:
 			print("Select a correct option")
+	#print(f"prpsal id {config.voting_system.functions.proposalId().call()}")
 	print(thank_you_art)
 	
 

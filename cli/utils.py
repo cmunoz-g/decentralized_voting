@@ -1,12 +1,36 @@
-from config import voting_system, web3, contract_address
+from config import voting_system, web3, account, contract_address
 from web3 import Web3
-from datetime import date
+from datetime import datetime
+import os
+import sys
 
 # Añadir un Proposal nuevo
 def add_proposal():
-	
-
-
+	os.system("clear")
+	name = input("Enter the proposal name: ")
+	deadline_str = input("Enter the proposal deadline (YYYY-MM-DD): ")
+	try:
+		deadline = int(datetime.strptime(deadline_str, "%Y-%m-%d").timestamp())
+		nonce = web3.eth.get_transaction_count(account.address)
+		gas_price = web3.eth.gas_price # obtenemos un valor para el precio del gas en base a las condiciones de la red (en este caso es el default de Ganache)
+		transaction = voting_system.functions.addProposal(name, deadline).build_transaction({
+			'from': account.address,
+			'nonce': nonce,
+			'gas': 300000,
+			'gasPrice': gas_price 
+		})
+		signed_transaction = web3.eth.account.sign_transaction(transaction, account.key) # Firmamos la transacción con la private key de la cuenta
+		tx_hash = web3.eth.send_raw_transaction(signed_transaction.raw_transaction)
+		receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+		if receipt.status == 1:
+			print(f"Proposal added successfully | Transaction hash: {tx_hash.hex()}")
+		else:
+			print(f"Error: Transaction failed | Transaction hash: {tx_hash.hex()}", file=sys.stderr) 
+	except Exception as e:
+		print(f"Error: {e}", file=sys.stderr)
+	print("\nPress any key to continue")
+	input()
+	os.system("clear")
 
 # Adornos
 ascii_art = r"""

@@ -14,7 +14,9 @@ if not rpc or not private_key or not contract_address:
 	raise ValueError("Error: Missing environment variables")
 
 # Cargamos el archivo abi.json para poder crear instancias de VotingSystem
-with open("abi.json", "r") as file:
+current_dir = os.path.dirname(os.path.abspath(__file__))
+abi_path = os.path.join(current_dir, "abi.json")
+with open(abi_path, "r") as file:
 	try:
 		abi = json.load(file)
 	except FileNotFoundError:
@@ -38,3 +40,6 @@ try:
 	voting_system = web3.eth.contract(address=contract_address, abi=abi)
 except Exception as e:
 	print(f"Error: {e}", file=sys.stderr)
+
+# Creamos la cuenta desde la que se crearán y firmarán las transacciones
+account = web3.eth.account.from_key(private_key)
