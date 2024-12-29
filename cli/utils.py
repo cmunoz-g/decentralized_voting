@@ -4,9 +4,11 @@ from datetime import datetime
 import os
 import sys
 
+# === 1 ===
 # Añadir una Proposal nueva
 def add_proposal():
 	os.system("clear")
+	print(f"{YELLOW}=== Adding a new proposal ==={RESET}")
 	name = input("Enter the proposal name: ")
 	deadline_str = input("Enter the proposal deadline (YYYY-MM-DD): ")
 	try:
@@ -32,6 +34,7 @@ def add_proposal():
 	input()
 	os.system("clear")
 
+# === 2 ===
 def	print_proposal(prop_id, name, votes_in_favor, votes_against, formatted_deadline):
 	print(
             f"{BLUE}ID: {str(prop_id):<2}{RESET} | "
@@ -43,7 +46,7 @@ def	print_proposal(prop_id, name, votes_in_favor, votes_against, formatted_deadl
 
 def show_active_proposals(total_proposals):
 	if total_proposals:
-		print(" === Active Proposals ===")
+		print(f"{YELLOW}=== Active Proposals ==={RESET}")
 		for prop_id in range(total_proposals):
 			proposal = voting_system.functions.proposals(prop_id).call()
 			name, proposed_by, votes_in_favor, votes_against, is_open, deadline = proposal
@@ -53,7 +56,6 @@ def show_active_proposals(total_proposals):
 				print_proposal(prop_id, name, votes_in_favor, votes_against, formatted_deadline)
 	else:
 		print("There are no active proposals")
-	return total_proposals
 
 # Votar en una Proposal
 def vote_on_proposal():
@@ -65,7 +67,7 @@ def vote_on_proposal():
 	name, proposed_by, votes_in_favor, votes_against, is_open, deadline = proposal
 	if str(name) and is_open:
 		os.system("clear")
-		print(" === Proposal to vote on === ")
+		print(f"{YELLOW}=== Proposal to vote on ==={RESET}")
 		readable_time = datetime.fromtimestamp(deadline)
 		formatted_deadline = readable_time.strftime("%Y-%m-%d")
 		print_proposal(id, name, votes_in_favor, votes_against, formatted_deadline)
@@ -98,6 +100,7 @@ def vote_on_proposal():
 	input()
 	os.system("clear")
 
+# === 3 ===
 # Cerrar una Proposal
 def close_proposal():
 	os.system("clear")
@@ -132,6 +135,54 @@ def close_proposal():
 	input()
 	os.system("clear")
 
+# === 4 ===
+def show_all_proposals(total_proposals):
+	if total_proposals:
+		print(f"{YELLOW}=== Proposals ==={RESET}")
+		for prop_id in range(total_proposals):
+			proposal = voting_system.functions.proposals(prop_id).call()
+			name, proposed_by, votes_in_favor, votes_against, is_open, deadline = proposal
+			print(
+            f"{BLUE}ID: {str(prop_id):<2}{RESET} | "
+            f"Name: {name:<15}"
+        )
+	else:
+		print("There are no proposals yet")
+
+# Visualizar los resultados
+def view_proposal_results():
+	os.system("clear")
+	total_proposals = voting_system.functions.proposalId().call()
+	show_all_proposals(total_proposals)
+	id = int(input("\nEnter the proposal ID to show: "))
+	proposal = voting_system.functions.proposals(id).call()
+	name, proposed_by, votes_in_favor, votes_against, is_open, deadline = proposal
+	if str(name):
+		os.system("clear")
+		print(f"{YELLOW}=== Proposal Results ===\n{RESET}"
+            f"{BLUE}ID: {id}{RESET}\n"
+            f"Name: {name}\n"
+			f"Owner: {proposed_by}\n"
+            f"Votes ({GREEN}For{RESET}/{RED}Against{RESET}): "
+            f"{GREEN}{votes_in_favor}{RESET}/{RED}{votes_against}{RESET}\n"
+			"Open? ", end=""
+        )
+		if is_open:
+			print(f"{GREEN}Yes{RESET}")
+			readable_time = datetime.fromtimestamp(deadline)
+			formatted_deadline = readable_time.strftime("%Y-%m-%d")
+			print(f"Deadline: {formatted_deadline}")
+		else:
+			print(f"{RED}No{RESET}")
+			if votes_in_favor > votes_against:
+				print(f"Proposal was {GREEN}accepted{RESET}")
+			else:
+				print(f"Proposal was {RED}rejected{RESET}")
+	print("\nPress any key to continue")
+	input()
+	os.system("clear")
+
+
 # Adornos
 ascii_art = r"""
  __      __   _   _                _____           _                 
@@ -145,12 +196,12 @@ ascii_art = r"""
 
 		Welcome! Press any key to enter
 """
-menu = """=== Voting System CLI ===
+menu = """\033[33m=== Voting System CLI ===\033[0m
 1. 📝 Add Proposal
-2. 🗳️ Vote on Proposal
+2. 🗳️  Vote on Proposal
 3. 🚪 Close Proposal
 4. 📊 View Proposal Results
-5. ❌ Exit
+5. ❌ \033[31mExit\033[0m
 	"""
 thank_you_art = r"""
  _____ _                 _                        _ 
