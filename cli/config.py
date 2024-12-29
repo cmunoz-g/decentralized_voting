@@ -35,7 +35,6 @@ else:
 
 # Creamos un objeto VotingSystem
 try:
-	VotingSystem = web3.eth.contract(address=contract_address, abi=abi)
+	voting_system = web3.eth.contract(address=contract_address, abi=abi)
 except Exception as e:
 	print(f"Error: {e}", file=sys.stderr)
-
