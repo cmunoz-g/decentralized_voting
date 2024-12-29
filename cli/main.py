@@ -6,6 +6,7 @@ from datetime import datetime
 
 # Tests y to-do's
 # No hay una forma sencilla de obtener el mensaje de error que tira require en Voting.sol, así que ahora mismo se rechaza la transacción pero no se indica por qué
+# Formatear y comentar codigo
 
 def display_title():
 	os.system("clear")
@@ -21,7 +22,7 @@ def main():
 		if option == 1:
 			add_proposal()
 		elif option == 2:
-			print("2")
+			vote_on_proposal()
 		elif option == 3:
 			print("3")
 		elif option == 4:
