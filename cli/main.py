@@ -4,7 +4,9 @@ from utils import *
 from web3 import Web3
 from datetime import datetime
 
-# Tests y to-do's
+# === Tests y to-do's ===
+
+# Añadir una forma de ir para atrás durante el menú
 # No hay una forma sencilla de obtener el mensaje de error que tira require en Voting.sol, así que ahora mismo se rechaza la transacción pero no se indica por qué
 # Formatear y comentar codigo
 
@@ -24,7 +26,7 @@ def main():
 		elif option == 2:
 			vote_on_proposal()
 		elif option == 3:
-			print("3")
+			close_proposal()
 		elif option == 4:
 			print("4")
 		elif option == 5:

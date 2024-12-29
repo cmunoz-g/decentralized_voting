@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 import sys
 
-# Añadir un Proposal nuevo
+# Añadir una Proposal nueva
 def add_proposal():
 	os.system("clear")
 	name = input("Enter the proposal name: ")
@@ -47,7 +47,7 @@ def show_active_proposals(total_proposals):
 		for prop_id in range(total_proposals):
 			proposal = voting_system.functions.proposals(prop_id).call()
 			name, proposed_by, votes_in_favor, votes_against, is_open, deadline = proposal
-			if (is_open):
+			if (is_open == True):
 				readable_time = datetime.fromtimestamp(deadline)
 				formatted_deadline = readable_time.strftime("%Y-%m-%d")
 				print_proposal(prop_id, name, votes_in_favor, votes_against, formatted_deadline)
@@ -55,7 +55,7 @@ def show_active_proposals(total_proposals):
 		print("There are no active proposals")
 	return total_proposals
 
-# Votar en un proposal
+# Votar en una Proposal
 def vote_on_proposal():
 	os.system("clear")
 	total_proposals = voting_system.functions.proposalId().call()
@@ -63,16 +63,16 @@ def vote_on_proposal():
 	id = int(input("\nEnter the proposal ID to vote on: "))
 	proposal = voting_system.functions.proposals(id).call()
 	name, proposed_by, votes_in_favor, votes_against, is_open, deadline = proposal
-	if str(name):
+	if str(name) and is_open:
 		os.system("clear")
 		print(" === Proposal to vote on === ")
 		readable_time = datetime.fromtimestamp(deadline)
 		formatted_deadline = readable_time.strftime("%Y-%m-%d")
 		print_proposal(id, name, votes_in_favor, votes_against, formatted_deadline)
-		vote = input("\nOptions: yes/no: ").strip().lower()
+		vote = input(f"\nOptions: {GREEN}yes{RESET}/{RED}no{RESET}: ").strip().lower()
 		while vote not in ["yes", "y", "no", "n"]:
 			print("Not a valid option. Please type 'yes' or 'no'")
-			vote = input("\nOptions: yes/no: ").strip().lower()
+			vote = input(f"\nOptions: {GREEN}yes{RESET}/{RED}no{RESET}: ").strip().lower()
 		in_favor = vote in ["yes", "y"]
 		try:
 			nonce = web3.eth.get_transaction_count(account.address)
@@ -90,6 +90,40 @@ def vote_on_proposal():
 				print(f"\nYour anonimous vote was casted successfully | Transaction hash: {tx_hash.hex()}")
 			else:
 				print(f"\nError: Could not cast your vote | Transaction hash: {tx_hash.hex()}")
+		except Exception as e:
+			print(f"Error: {e}")
+	else:
+		print("Error: There is not an open proposal with that ID", file=sys.stderr)
+	print("\nPress any key to continue")
+	input()
+	os.system("clear")
+
+# Cerrar una Proposal
+def close_proposal():
+	os.system("clear")
+	total_proposals = voting_system.functions.proposalId().call()
+	show_active_proposals(total_proposals)
+	id = int(input("\nEnter the proposal ID to close: "))
+	proposal = voting_system.functions.proposals(id).call()
+	name, proposed_by, votes_in_favor, votes_against, is_open, deadline = proposal
+	if str(name):
+		os.system("clear")
+		try:
+			nonce = web3.eth.get_transaction_count(account.address)
+			gas_price = web3.eth.gas_price
+			transaction = voting_system.functions.closeProposal(id).build_transaction({
+				'from': account.address,
+				'nonce': nonce,
+				'gas': 300000,
+				'gasPrice': gas_price
+			})
+			signed_transaction = web3.eth.account.sign_transaction(transaction, account.key)
+			tx_hash = web3.eth.send_raw_transaction(signed_transaction.raw_transaction)
+			receipt = web3.eth.get_transaction_receipt(tx_hash)
+			if receipt.status == 1:
+				print(f"The proposal {id} was closed | Transaction hash: {tx_hash.hex()}")
+			else:
+				print(f"The proposal {id} could not be closed | Transaction hash: {tx_hash.hex()}")
 		except Exception as e:
 			print(f"Error: {e}")
 	else:
