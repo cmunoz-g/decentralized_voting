@@ -4,15 +4,6 @@ from utils import *
 from web3 import Web3
 from datetime import datetime
 
-# === Tests y to-do's ===
-
-# Añadir una forma de ir para atrás durante el menú
-# bugfix para cuando se introduce un no int
-# bugfix para cuadno no hay proposals, deberia no ejecutar el resto del codigo
-# quality of life fix: para permitir mirar los resultados de diferentes elecciones sin tener que pasar por el menu principal
-# No hay una forma sencilla de obtener el mensaje de error que tira require en Voting.sol, así que ahora mismo se rechaza la transacción pero no se indica por qué
-# Formatear y comentar codigo
-
 def display_title():
 	os.system("clear")
 	print(ascii_art)
