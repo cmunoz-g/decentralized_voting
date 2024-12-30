@@ -56,4 +56,7 @@ trufflemigrate:
 run:
 	@python cli/main.py
 
-.PHONY: all build stop clean delete logs ps re trufflemigrate trufflecompile run
+test:
+	@npx truffle test
+
+.PHONY: all build stop clean delete logs ps re trufflemigrate trufflecompile run test
