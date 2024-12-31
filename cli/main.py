@@ -4,6 +4,8 @@ from utils import *
 from web3 import Web3
 from datetime import datetime
 
+# falta: lazy check para cerrar expired Proposals
+
 def display_title():
 	os.system("clear")
 	print(ascii_art)
