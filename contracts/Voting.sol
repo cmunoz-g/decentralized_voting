@@ -29,7 +29,7 @@ contract VotingSystem {
 	// Events
 	event ProposalAdded(uint indexed proposalId, string propName, address indexed proposedBy); // Indexeamos los valores Id y proposedBy para filtrar de manera mas eficiente off-chain
 	event ProposalClosed(uint indexed proposalId, string propName, uint votesInFavor, uint votesAgainst, uint closedAt); 
-	event VotedCasted(uint indexed proposalId);	// Registramos cada voto como un evento, para facilitar la auditoría
+	event VoteCast(uint indexed proposalId);	// Registramos cada voto como un evento, para facilitar la auditoría
 	// Constructor
 
 	constructor() {
@@ -76,7 +76,7 @@ contract VotingSystem {
 		hasVoted[propToVoteId][msg.sender] = true;
 		// Únicamente emitimos como evento si ha habido un voto (no de quién, o qué ha votado), para preservar el anonimato.
 		// Esta necesidad de anonimato presenta oportunidades para incorporar técnicas criptográficas como las Zero-Knowledge Proofs (ZKPs), que permiten a cada individuo demostrar de manera segura que ha emitido su voto sin comprometer su identidad.
-		emit VotedCasted(propToVoteId);
+		emit VoteCast(propToVoteId);
 	}
 
 	function getProposalResults(uint propToGetId) public view returns (uint, uint, bool) {

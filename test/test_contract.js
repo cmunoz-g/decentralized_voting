@@ -185,12 +185,44 @@ contract("VotingSystem", (accounts => { // Accounts es un array de direcciones E
 	it("a non owner should not be able to close a proposal", async() => {
 		await instance.addProposal(proposalName, unixTime);
 		try {
-			await instance.closeProposal(0, { from: accounts[1]})
+			await instance.closeProposal(0, { from: accounts[1]});
 			assert.fail("Non-owner should not be able to close a proposal");
 		}
 		catch (err) {
-			assert.include(err.message, "Error: Caller is not the owner", "Expected revert with reason")
+			assert.include(err.message, "Error: Caller is not the owner", "Expected revert with reason");
 		}
 	})
+	
+	// Testeamos getProposalResults()
+	it("proposal results should return the correct values", async() => {
+		await instance.addProposal(proposalName, unixTime);
+		await instance.vote(0, true);
+		
+		const proposalResults = await instance.getProposalResults(0);
+		assert.equal(proposalResults[2], true, "Function should return true for isOpen");
+		assert.equal(proposalResults[0].toNumber(), 1, "Function should return 1 for votesInFavor");
+		assert.equal(proposalResults[1].toNumber(), 0, "Function should return 0 for votesAgainst");
+	})
 
+	// Testeamos events
+
+	it("should emit a ProposalAdded event when a proposal is added", async() => {
+		const tx = await instance.addProposal(proposalName, unixTime);
+
+		assert.equal(tx.logs[0].event, "ProposalAdded");
+	})
+
+	it("should emit a ProposalClosed event when a proposal is closed", async() => {
+		await instance.addProposal(proposalName, unixTime);
+		const tx = await instance.closeProposal(0);
+		
+		assert.equal(tx.logs[0].event, "ProposalClosed");
+	})
+
+	it("should emit a VoteCast event when a vote is cast", async() => {
+		await instance.addProposal(proposalName, unixTime);
+		const tx = await instance.vote(0, true);
+		
+		assert.equal(tx.logs[0].event, "VoteCast");
+	})
 }))
