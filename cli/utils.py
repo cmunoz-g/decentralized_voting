@@ -1,4 +1,4 @@
-from config import voting_system, web3, account, contract_address
+from cli.config import voting_system, web3, account, contract_address
 from web3 import Web3
 from datetime import datetime
 import os

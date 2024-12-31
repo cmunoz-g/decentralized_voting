@@ -57,6 +57,7 @@ run:
 	@python cli/main.py
 
 test:
+	@echo "$(BLUE)Calling truffle tests for the contract$(DEF_COLOR)"
 	@npx truffle test
 
 .PHONY: all build stop clean delete logs ps re trufflemigrate trufflecompile run test
