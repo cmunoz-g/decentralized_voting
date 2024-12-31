@@ -127,6 +127,26 @@ contract("VotingSystem", (accounts => { // Accounts es un array de direcciones E
 		}
 	})
 
+	it("non-owners should be able to vote on a proposal", async() => {
+		await instance.addProposal(proposalName, unixTime);
+		
+		// Votamos desde otra address en la proposal creada por accounts[0]
+		await instance.vote(0, true, { from: accounts[1] });
+		const proposal = await instance.proposals(0)
+		assert.equal(proposal.votesInFavor.toNumber(), 1, "Votes in favor should increment")
+		assert.equal(proposal.votesAgainst.toNumber(), 0, "Votes against should remain 0")	
+	})
+
+	// Testeamos la función closeProposal()
+
+	it("owner should be able to close proposals, state should change appropiately", async() => {
+		await instance.addProposal(proposalName, unixTime);
+		await instance.closeProposal(0);
+
+		const proposal = await instance.proposals(0);
+		assert.equal(proposal.isOpen, false, "Proposal should be closed");
+	})
+
 	it("a voter should not be able to vote on a closed proposal", async() => {
 		await instance.addProposal(proposalName, unixTime);
 		await instance.closeProposal(0)
@@ -140,13 +160,37 @@ contract("VotingSystem", (accounts => { // Accounts es un array de direcciones E
 		}
 	})
 
-	it("non-owners should be able to vote on a proposal", async() => {
-		await instance.addProposal(proposalName, unixTime);
-		
-		// Votamos desde otra address en la proposal creada por accounts[0]
-		await instance.vote(0, true, { from: accounts[1] });
-		const proposal = await instance.proposals(0)
-		assert.equal(proposal.votesInFavor.toNumber(), 1, "Votes in favor should increment")
-		assert.equal(proposal.votesAgainst.toNumber(), 0, "Votes against should remain 0")	
+	it("a non-existant proposal should not be able to be closed", async() => {
+		try {
+			await instance.closeProposal(0);
+			assert.fail("Should not be able to close a non-existant proposal");
+		}
+		catch (err) {
+			assert.include(err.message, "Error: Cannot close: Proposal does not exist", "Expected revert with reason");
+		}
 	})
+
+	it("an already closed proposal should not be able to be closed", async() => {
+		await instance.addProposal(proposalName, unixTime);
+		await instance.closeProposal(0);
+		try {
+			await instance.closeProposal(0);
+			assert.fail("Should not be able to close an already closed proposal");
+		}
+		catch (err) {
+			assert.include(err.message, "Error: Cannot close: Proposal is already marked as closed", "Expected revert with reason")
+		}
+	})
+	
+	it("a non owner should not be able to close a proposal", async() => {
+		await instance.addProposal(proposalName, unixTime);
+		try {
+			await instance.closeProposal(0, { from: accounts[1]})
+			assert.fail("Non-owner should not be able to close a proposal");
+		}
+		catch (err) {
+			assert.include(err.message, "Error: Caller is not the owner", "Expected revert with reason")
+		}
+	})
+
 }))
