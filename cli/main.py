@@ -4,8 +4,6 @@ from utils import *
 from web3 import Web3
 from datetime import datetime
 
-# falta: lazy check para cerrar expired Proposals
-
 def display_title():
 	os.system("clear")
 	print(ascii_art)
@@ -16,6 +14,7 @@ def main():
 	display_title()
 	while (True):
 		print(menu)
+		update_close_status()
 		option = int(input("Enter your option: "))
 		if option == 1:
 			add_proposal()

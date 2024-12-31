@@ -156,7 +156,7 @@ def close_proposal():
 					})
 					signed_transaction = web3.eth.account.sign_transaction(transaction, account.key)
 					tx_hash = web3.eth.send_raw_transaction(signed_transaction.raw_transaction)
-					receipt = web3.eth.get_transaction_receipt(tx_hash)
+					receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
 					if receipt.status == 1:
 						print(f"The proposal {id} was closed | Transaction hash: {tx_hash.hex()}")
 					else:
@@ -230,6 +230,35 @@ def view_proposal_results():
 			input()
 			view_proposal_results()
 		os.system("clear")
+
+# Cerrar las propuestas que han expirado
+def update_close_status():
+	total_proposals = voting_system.functions.proposalId().call()
+	for prop_id in range(total_proposals):
+		proposal = voting_system.functions.proposals(prop_id).call()
+		deadline = proposal[5]
+		current_timestamp = int(datetime.now().timestamp())
+		if deadline <= current_timestamp:
+			try:
+				nonce = web3.eth.get_transaction_count(account.address)
+				gas_price = web3.eth.gas_price
+				transaction = voting_system.functions.closeProposal(prop_id).build_transaction({
+					'from': account.address,
+					'nonce': nonce,
+					'gas': 300000,
+					'gasPrice': gas_price
+				})
+				signed_transaction = web3.eth.account.sign_transaction(transaction, account.key)
+				tx_hash = web3.eth.send_raw_transaction(signed_transaction.raw_transaction)
+				receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+				if receipt.status == 1:
+					print(f"The proposal {prop_id} was closed | Transaction hash: {tx_hash.hex()}")
+				else:
+					print(f"The proposal {prop_id} could not be closed | Transaction hash: {tx_hash.hex()}", file=sys.stderr)
+				
+			except Exception as e:
+				print(f"Error: {e}", file=sys.stderr)
+
 
 # Adornos
 ascii_art = r"""
