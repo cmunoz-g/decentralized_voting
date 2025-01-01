@@ -22,7 +22,7 @@ with open(abi_path, "r") as file:
 	except FileNotFoundError:
 		print("Error: Could not find abi.json file", file=sys.stderr)
 	except json.JSONDecodeError:
-		print("Error: could not parse abi.json file", file=sys.stderr)
+		print("Error: Could not parse abi.json file", file=sys.stderr)
 	except Exception as e:
 		print(f"Error: {e}", file=sys.stderr)
 	else:

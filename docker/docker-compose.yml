@@ -5,16 +5,23 @@ services:
     ports:
       - "8545:8545"
     command: >
-      -m "tech tech tech tech tech"
+      --mnemonic "tech tech tech tech tech tech tech tech tech tech"
       --chain.networkId 1337
       --db /data
+      --account_keys_path /data/keys.json
       --host 0.0.0.0
+    volumes:
+      - ganache_data:/data
   app:
     build:
       context: ..
       dockerfile: docker/Dockerfile
+    volumes:
+      - ganache_data:/ganache_shared
     depends_on:
       - ganache
     environment:
       - WEB3_PROVIDER=http://ganache:8545
 
+volumes:
+  ganache_data:

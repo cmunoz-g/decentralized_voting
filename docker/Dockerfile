@@ -8,6 +8,7 @@ COPY requirements.txt .
 COPY truffle-config.js .
 COPY docker/start.sh .
 COPY contracts ./contracts
+COPY migrations ./migrations
 COPY test/ ./test/
 
 RUN echo "Contents of /app:" && ls -l /app
