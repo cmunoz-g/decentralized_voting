@@ -11,8 +11,6 @@ COPY contracts ./contracts
 COPY migrations ./migrations
 COPY test/ ./test/
 
-RUN echo "Contents of /app:" && ls -l /app
-
 # Instalamos dependencias
 RUN apt-get update && apt-get install -y nodejs npm jq \
     && pip install --upgrade pip \
@@ -22,8 +20,3 @@ RUN apt-get update && apt-get install -y nodejs npm jq \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN chmod +x start.sh
-
-# Compilamos contratos
-RUN npx truffle compile
-
-CMD ["bash", "/app/start.sh"]

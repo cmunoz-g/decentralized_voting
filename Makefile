@@ -22,6 +22,17 @@ build:
 	@$(DOCKER_COMPOSE) up -d --build --remove-orphans --force-recreate
 	@echo "$(GREEN)Project started successfully! Containers are up and running.$(DEF_COLOR)"
 
+migrate:
+	@$(DOCKER_COMPOSE) run --rm app bash /app/start.sh
+	@echo "$(GREEN)Migrations and setup completed successfully!$(DEF_COLOR)"
+
+run:
+	@$(DOCKER_COMPOSE) run --rm app python ./cli/main.py
+
+test:
+	@echo "$(BLUE)Calling truffle tests for the contract$(DEF_COLOR)"
+	@$(DOCKER_COMPOSE) run --rm app truffle test
+
 stop:
 	@$(DOCKER_COMPOSE) stop
 	@echo "$(BLUE)Containers stopped.$(DEF_COLOR)"
@@ -44,20 +55,5 @@ ps:
 
 re: clean all
 	@echo "$(GREEN)Project restarted successfully!$(DEF_COLOR)"
-
-trufflecompile: 
-	@npx truffle compile --all
-	@echo "$(BLUE)Recompiled Voting.sol contract.$(DEF_COLOR)"
-
-trufflemigrate:
-	@npx truffle migrate --network development
-	@echo "$(BLUE)Deployed Voting.sol contract in the blockchain.$(DEF_COLOR)"
-
-run:
-	@python cli/main.py
-
-test:
-	@echo "$(BLUE)Calling truffle tests for the contract$(DEF_COLOR)"
-	@npx truffle test
 
 .PHONY: all build stop clean delete logs ps re trufflemigrate trufflecompile run test

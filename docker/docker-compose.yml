@@ -18,6 +18,8 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - ganache_data:/ganache_shared
+      - build_data:/app/build
+      - cli_data:/app/cli
     depends_on:
       - ganache
     environment:
@@ -25,3 +27,5 @@ services:
 
 volumes:
   ganache_data:
+  build_data:
+  cli_data:

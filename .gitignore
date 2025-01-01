@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *.pyo
+.pytest_cache
 env/
 
 # Node.js
@@ -16,6 +17,7 @@ docker-compose.override.yml
 # Build and artifacts
 build/
 *.sol.js
+/cli/abi.json
 
 # Misc.
 .vscode/

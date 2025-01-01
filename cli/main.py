@@ -1,5 +1,5 @@
-import config
 import os
+from config import voting_system
 from utils import *
 from web3 import Web3
 from datetime import datetime
