@@ -10,18 +10,19 @@ COPY docker/start.sh .
 COPY contracts ./contracts
 COPY test/ ./test/
 
+RUN echo "Contents of /app:" && ls -l /app
+
 # Instalamos dependencias
 RUN apt-get update && apt-get install -y nodejs npm jq \
+    && pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt \
     && npm install -g truffle ganache \
+    && npm install -g web3 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN chmod +x start.sh
 
 # Compilamos contratos
 RUN npx truffle compile
-
-# Instalamos dependencias de python ()
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 CMD ["bash", "/app/start.sh"]

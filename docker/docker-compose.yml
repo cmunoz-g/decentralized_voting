@@ -4,13 +4,15 @@ services:
     image: trufflesuite/ganache
     ports:
       - "8545:8545"
-    command: -m "tech tech tech tech tech"
+    command: >
+      -m "tech tech tech tech tech"
+      --chain.networkId 1337
+      --db /data
+      --host 0.0.0.0
   app:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    volumes:
-      - ..:/app
     depends_on:
       - ganache
     environment:

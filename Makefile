@@ -19,7 +19,7 @@ DOCKER_COMPOSE = docker-compose -f $(COMPOSE_FILE)
 all: build
 
 build:
-	@$(DOCKER_COMPOSE) up -d --build
+	@$(DOCKER_COMPOSE) up -d --build --remove-orphans --force-recreate
 	@echo "$(GREEN)Project started successfully! Containers are up and running.$(DEF_COLOR)"
 
 stop:
