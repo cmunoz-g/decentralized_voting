@@ -12,7 +12,6 @@ ABI_NEWPATH="/app/cli/abi.json"
 jq '.abi' $ABI_PATH > $ABI_NEWPATH
 
 echo "ABI=$ABI_NEWPATH"
-
 echo "PRIVATE_KEY=$PRIVATE_KEY"
 echo "CONTRACT_ADDRESS=$CONTRACT_ADDRESS"
 

@@ -5,8 +5,13 @@ import os
 import sys
 
 # === 1 ===
-# Añadir una Proposal nueva
 def add_proposal():
+	"""
+    Agrega una nueva propuesta al sistema de votación.
+
+    Solicita el nombre y la fecha límite de la propuesta, construye y envía una transacción
+    al contrato inteligente, y verifica el éxito de la transacción.
+    """
 	os.system("clear")
 	print(f"{YELLOW}=== Adding a new proposal ==={RESET}")
 	name = input("Enter the proposal name: ")
@@ -73,8 +78,13 @@ def get_proposal_id(msg):
 		except ValueError:
 			print("Error: Please enter an integer", file=sys.stderr)
 
-# Votar en una Proposal
 def vote_on_proposal():
+	"""
+    Vota sobre una propuesta existente en el sistema de votación.
+
+    Muestra las propuestas activas, solicita el ID de la propuesta y el voto del usuario,
+    y envía la transacción al contrato inteligente.
+    """
 	os.system("clear")
 	total_proposals = voting_system.functions.proposalId().call()
 	show_active_proposals(total_proposals)
@@ -129,8 +139,13 @@ def vote_on_proposal():
 		os.system("clear")
 
 # === 3 ===
-# Cerrar una Proposal
 def close_proposal():
+	"""
+    Cierra una propuesta existente en el sistema de votación.
+
+    Muestra las propuestas activas, solicita el ID de la propuesta a cerrar,
+    y envía la transacción al contrato inteligente.
+    """
 	os.system("clear")
 	total_proposals = voting_system.functions.proposalId().call()
 	show_active_proposals(total_proposals)
@@ -187,8 +202,13 @@ def show_all_proposals(total_proposals):
 		print("\nPress any key to continue")
 		input()
 
-# Visualizar los resultados
 def view_proposal_results():
+	"""
+    Muestra los resultados de una propuesta existente en el sistema de votación.
+
+    Muestra todas las propuestas, solicita el ID de la propuesta a mostrar,
+    y muestra los detalles y resultados de la propuesta seleccionada.
+    """
 	os.system("clear")
 	total_proposals = voting_system.functions.proposalId().call()
 	show_all_proposals(total_proposals)
@@ -231,8 +251,13 @@ def view_proposal_results():
 			view_proposal_results()
 		os.system("clear")
 
-# Cerrar las propuestas que han expirado
+# === Extra ===
 def update_close_status():
+	"""
+    Actualiza el estado de cierre de las propuestas.
+
+    Revisa todas las propuestas y cierra aquellas cuya fecha límite ha pasado.
+    """
 	total_proposals = voting_system.functions.proposalId().call()
 	for prop_id in range(total_proposals):
 		proposal = voting_system.functions.proposals(prop_id).call()
@@ -259,8 +284,7 @@ def update_close_status():
 			except Exception as e:
 				print(f"Error: {e}", file=sys.stderr)
 
-
-# Adornos
+# === Adornos ===
 ascii_art = r"""
  __      __   _   _                _____           _                 
  \ \    / /  | | (_)              / ____|         | |                
@@ -291,6 +315,7 @@ thank_you_art = r"""
                                 |___/               
 """
 
+# === Colores ===
 RED = "\033[31m"
 GREEN = "\033[32m"
 YELLOW = "\033[33m"

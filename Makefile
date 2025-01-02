@@ -56,4 +56,4 @@ ps:
 re: clean all
 	@echo "$(GREEN)Project restarted successfully!$(DEF_COLOR)"
 
-.PHONY: all build stop clean delete logs ps re trufflemigrate trufflecompile run test
+.PHONY: all build stop clean delete logs ps re run test
