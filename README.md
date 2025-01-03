@@ -187,8 +187,3 @@ make test
   ```bash
   make re
   ```
-
-## 5. Conclusión
-
-Este sistema de votación descentralizado ofrece un entorno seguro y confiable para gestionar votaciones, con un diseño extensible y preparado para implementaciones futuras. Las pruebas aseguran que las funcionalidades principales estén libres de errores antes de desplegarse en un entorno real.
-
